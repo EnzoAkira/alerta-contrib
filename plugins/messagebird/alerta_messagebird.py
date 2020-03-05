@@ -229,14 +229,15 @@ class MessageBird(PluginBase):
       return
       
     # If new or update Alert is Critical make a Call
-    if alert.severity == 'critical':
+    if alert.severity == 'critical' and alert.status not in ['ack', 'closed']:
       message = self._getVoiceMessage(host[1], alert.severity, alert.event)
+      sms = self._getSMSMessage(host[1], alert.severity, alert.event)
       
       # DEBUGGING
       LOG.debug('Messagebird: Voice Message - {}'.format(message))
-    
       self._makeVoiceMessage(message, L_NUMBERS)
-    
+      self._makeSMS(sms, L_NUMBERS)
+
     # When severity decrease send a SMS
     if alert.severity in ['warning', 'cleared'] and alert.status not in ['ack', 'closed']:
        sms = self._getSMSMessage(host[1], alert.severity, alert.event)
