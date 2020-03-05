@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import re
-import string
 from alerta.models.group import GroupUsers
 import messagebird
 from alerta.plugins import PluginBase
@@ -16,7 +15,7 @@ LOG = logging.getLogger('alerta.plugins.messagebird')
 
 MB_APIKEY = app.config['MESSAGEBIRD_APIKEY'] # !!! Do not delete !!!
 FROM_NUMBER = app.config['MESSAGEBIRD_FROM_NUMBER'] # !!! Do not delete !!!
-ID_GROUP = app.config['ID_FOR_FIREMASTER'] # !!! Do not delete !!!
+ID_GROUP = app.config['ID_OF_GROUP'] # !!! Do not delete !!!
 
 
 class MessageBird(PluginBase):
@@ -27,16 +26,13 @@ class MessageBird(PluginBase):
     
     try:
       GROUP_FM = GroupUsers.find_by_id(ID_GROUP)
-      LOG.debug('MessageBird: Group Firemaster: {}'.format(GROUP_FM)) # TESTING
             
       for USER in GROUP_FM:
         USER_NAME = USER.name
-        LOG.debug('MessageBird: The User %s', USER_NAME) # TESTING
         
         L_USER = USER_NAME.split('|')
         
         PHONE_NUMBER = L_USER[1].strip(' ')
-        LOG.debug('MessageBird: The phone number is: %s', PHONE_NUMBER) # TESTING
         
         if RE_phone.match(PHONE_NUMBER):
           NUMBER_LIST.append(PHONE_NUMBER)
@@ -91,7 +87,8 @@ class MessageBird(PluginBase):
     
     callMessage["webhook"] = {}
     
-    LOG.debug('Messagebird: CallMessage format {!s}'.format(callMessage)) # For TESTING
+    # DEBUGGING
+    #LOG.debug('Messagebird: CallMessage format {!s}'.format(callMessage)) # For TESTING
 
     return callMessage
 
@@ -107,9 +104,8 @@ class MessageBird(PluginBase):
 
       call = client.call_create(**callMessage)
       
-      LOG.debug('Messagebird: Information was returned as a {!r} object '.format(call)) # For TESTING
-      
       # DEBUGGING
+      #LOG.debug('Messagebird: Information was returned as a {!r} object '.format(call)) # For TESTING
       """
       info = "id: {id!r} | status: {status!r} | source: {source!r} | destination: {destination!r}"
       LOG.debug(info.format(id = call.data.id, status = call.data.status, source = call.data.source, destination = call.data.destination)) # For TESTING
@@ -157,6 +153,8 @@ class MessageBird(PluginBase):
 
     # Prepare Args to send on a Voice Message
     voiceMessage = self._makeVoiceMessagePayload(message, TO_NUMBER)
+    
+    # DEBUGGING
     LOG.debug('Messagebird: Voice Message format {}'.format(voiceMessage))
     
     # Make a Voice Message
