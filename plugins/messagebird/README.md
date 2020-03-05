@@ -28,11 +28,21 @@ Configuration
 Add `messagebird` to the list of enabled `PLUGINS` in `alertad.conf` server
 configuration file and set plugin-specific variables either in the
 server configuration file or as environment variables.
+Create a specific group that will use the plugin.
+Add the id of the group to `ID_OF_GROUP` var.
+
+On Alerta Dashboard format user name as:
+```
+FirstName SecondName | +351Number	
+```
+> **This only will work on numbers from Portugal!**
+
 
 ```python
 PLUGINS = ['messagebird']
 MESSAGEBIRD_APIKEY = ''  # default="not set"
 MESSAGEBIRD_FROM_NUMBER = ''  # default="not set"
+ID_OF_GROUP = '' # default="not set"
 ```
 
 **Example**
@@ -41,6 +51,7 @@ MESSAGEBIRD_FROM_NUMBER = ''  # default="not set"
 PLUGINS = ['reject','messagebird']
 MESSAGEBIRD_APIKEY = 'lkJASHd7698-POIHjh'  # default="not set"
 MESSAGEBIRD_FROM_NUMBER = '+3512199999'  # default="not set"
+ID_OF_GROUP = '720c3e2c-80fb-4d92-b4d6-a64c09e61bcc'
 ```
 
 Troubleshooting
@@ -70,8 +81,6 @@ References
 ----------
 
   * MessageBird API Reference:
-    
-    - [CallsFlow](https://developers.messagebird.com/api/voice-calling#call-flows)
-    - [Dynamic call flows](https://developers.messagebird.com/api/voice-calling#dynamic-call-flows)
-    - [Calls](https://developers.messagebird.com/api/voice-calling#calls)
-    - [SMS](https://developers.messagebird.com/api/sms-messaging#programmable-sms)
+
+    - [Voice Messaging](https://developers.messagebird.com/api/voice-messaging/)
+    - [SMS](https://developers.messagebird.com/api/sms-messaging/)
